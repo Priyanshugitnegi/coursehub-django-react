@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
 function Register({ onBackToLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +25,7 @@ function Register({ onBackToLogin }) {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/register/",
+        `${API_URL}/api/register/`,
         {
           method: "POST",
           headers: {
