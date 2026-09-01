@@ -1,0 +1,321 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+/* Main app */
+
+.app {
+  min-height: 100vh;
+}
+
+/* Navbar */
+
+.navbar {
+  height: 70px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0f172a;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.logo {
+  margin: 0;
+  font-size: 24px;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+.logout-button {
+  background: #ef4444;
+  color: white;
+  padding: 9px 18px;
+}
+
+.logout-button:hover {
+  background: #dc2626;
+}
+
+/* Main container */
+
+.container {
+  width: 90%;
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.container > h1 {
+  font-size: 30px;
+  margin-bottom: 25px;
+  color: #0f172a;
+}
+/* Forms */
+
+.course-form,
+.edit-form {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.course-form h2,
+.edit-form h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Inputs */
+
+input,
+select {
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: white;
+  color: #1e293b;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.course-form input {
+  flex: 1;
+  min-width: 180px;
+}
+
+.course-form select {
+  min-width: 180px;
+}
+
+/* Buttons */
+
+button {
+  height: 42px;
+  border: none;
+  border-radius: 7px;
+  padding: 0 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.add-button {
+  background: #2563eb;
+  color: white;
+}
+
+.enroll-button {
+  background: #16a34a;
+  color: white;
+}
+
+.edit-button {
+  background: #f59e0b;
+  color: white;
+}
+
+.delete-button {
+  background: #dc2626;
+  color: white;
+}
+
+.update-button {
+  background: #2563eb;
+  color: white;
+}
+
+.cancel-button {
+  background: #64748b;
+  color: white;
+}
+
+/* Course grid */
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+/* Course card */
+
+.course-card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.course-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
+}
+
+.course-card h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 22px;
+  color: #0f172a;
+}
+
+.course-card p {
+  color: #475569;
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+.course-card .enrolled {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+/* Course buttons */
+
+.course-card button {
+  margin-top: 15px;
+  margin-right: 8px;
+}
+
+/* Edit form */
+
+.edit-form {
+  border-left: 4px solid #2563eb;
+}
+
+.edit-form input,
+.edit-form select {
+  margin-right: 10px;
+  margin-bottom: 12px;
+}
+
+/* Errors */
+
+.error {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 12px 15px;
+  border-radius: 7px;
+  margin-bottom: 20px;
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .container {
+    width: 92%;
+    padding: 25px 0;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .course-form input,
+  .course-form select,
+  .form-row button {
+    width: 100%;
+  }
+
+  .course-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .course-card button {
+    margin-top: 10px;
+  }
+}
+
+/* Login page */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  padding: 40px;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.login-card h1 {
+  margin: 0;
+  font-size: 30px;
+  color: #0f172a;
+}
+
+.login-subtitle {
+  margin: 8px 0 28px;
+  color: #64748b;
+}
+
+.login-card input {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.login-button {
+  width: 100%;
+  background: #2563eb;
+  color: white;
+  margin-top: 5px;
+}
+
+.login-button:hover {
+  background: #1d4ed8;
+}
+
+.register-text {
+  margin: 20px 0 8px;
+  color: #64748b;
+  font-size: 14px;
+}

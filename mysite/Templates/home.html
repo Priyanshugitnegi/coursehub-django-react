@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Django App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+</head>
+<body>
+    <a href="/logout/">Logout</a>
+    <!-- <h1>Hello {{name}}</h1>
+    <p>Course:{{course}}</p>
+    {% if enrolled %}
+        <p>Youre enrolled in {{course}}</p>
+    {% else %}
+        <p>U r not enrolled</p>
+    {% endif %}
+    <h2>My courses</h2>
+    {% for course in courses %}
+        <p>{{ forloop.counter}},{{course}}</p>
+    {% endfor %} -->
+
+    <h2>My Courses</h2>
+    {% for course in courses %}
+    <!-- <p>{{course.name}}-{{course.duration}}minutes</p> -->
+     <p>
+    {{ course.name }} - {{ course.duration }} minutes
+    | Category: {{ course.category.name }}
+</p>
+    <a href="/edit/{{course.id}}/">Edit   </a>
+    <!-- <a href="/delete/{{course.id}}/">Delete</a> -->
+     <form method="POST" action="/delete/{{ course.id }}/" style="display:inline;">
+        
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+</form>
+<!-- <a href="/enroll/{{ course.id }}/">Enroll</a> -->
+ {% if course.id in enrolled_course_ids %}
+    <span>Enrolled ✅</span>
+{% else %}
+    <!-- <a href="/enroll/{{ course.id }}/">Enroll</a> -->
+
+    <form method="POST" action="/enroll/{{ course.id }}/" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit">Enroll</button>
+</form>
+{% endif %}
+    {% endfor %}
+
+    <h2>Add Course</h2>
+   
+    <form method="POST">
+    {% csrf_token %}
+
+    
+
+    {{ form.as_p }}
+
+    <button type="submit">Add Course</button>
+    </form>
+     
+</body>
+</html>
