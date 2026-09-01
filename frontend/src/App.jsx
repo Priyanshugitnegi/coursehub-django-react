@@ -12,18 +12,20 @@ const API_URL =
 function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   const [courses, setCourses] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [enrolledCourses, setEnrolledCourses] = useState([]);
+  const [enrollingCourse, setEnrollingCourse] = useState(null);
 
   const [courseName, setCourseName] = useState("");
   const [courseDuration, setCourseDuration] = useState("");
   const [courseCategory, setCourseCategory] = useState("");
 
   const [editingCourse, setEditingCourse] = useState(null);
-  const [enrollingCourse, setEnrollingCourse] = useState(null);
-
   const [showRegister, setShowRegister] = useState(false);
 
   const token = localStorage.getItem("token");
@@ -42,8 +44,8 @@ function App() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            username: username,
-            password: password,
+            username,
+            password,
           }),
         }
       );
@@ -62,33 +64,47 @@ function App() {
     }
   };
 
-  // ---------------- LOAD COURSES & ENROLLMENTS ----------------
+  // ---------------- LOAD DATA ----------------
 
   useEffect(() => {
     if (!token) {
       return;
     }
 
-    const loadCoursesAndEnrollments = async () => {
+    const loadData = async () => {
       try {
-        const [coursesResponse, enrollmentsResponse] =
-          await Promise.all([
-            fetch(`${API_URL}/api/courses/`, {
-              headers: {
-                Authorization: `Token ${token}`,
-              },
-            }),
+        const [
+          coursesResponse,
+          enrollmentsResponse,
+          categoriesResponse,
+        ] = await Promise.all([
+          fetch(`${API_URL}/api/courses/`, {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }),
 
-            fetch(`${API_URL}/api/enrollments/`, {
-              headers: {
-                Authorization: `Token ${token}`,
-              },
-            }),
-          ]);
+          fetch(`${API_URL}/api/enrollments/`, {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }),
 
-        const coursesData = await coursesResponse.json();
+          fetch(`${API_URL}/api/categories/`, {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }),
+        ]);
+
+        const coursesData =
+          await coursesResponse.json();
+
         const enrollmentsData =
           await enrollmentsResponse.json();
+
+        const categoriesData =
+          await categoriesResponse.json();
 
         if (!coursesResponse.ok) {
           throw new Error("Failed to fetch courses");
@@ -98,6 +114,10 @@ function App() {
           throw new Error("Failed to fetch enrollments");
         }
 
+        if (!categoriesResponse.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+
         setCourses(coursesData);
 
         setEnrolledCourses(
@@ -105,12 +125,14 @@ function App() {
             (enrollment) => enrollment.course
           )
         );
+
+        setCategories(categoriesData);
       } catch (error) {
         setError(error.message);
       }
     };
 
-    loadCoursesAndEnrollments();
+    loadData();
   }, [token]);
 
   // ---------------- ENROLL ----------------
@@ -162,7 +184,10 @@ function App() {
       return;
     }
 
-    if (!courseDuration || Number(courseDuration) <= 0) {
+    if (
+      !courseDuration ||
+      Number(courseDuration) <= 0
+    ) {
       alert("Duration must be greater than 0");
       return;
     }
@@ -254,8 +279,12 @@ function App() {
           },
           body: JSON.stringify({
             name: editingCourse.name,
-            duration: Number(editingCourse.duration),
-            category: Number(editingCourse.category),
+            duration: Number(
+              editingCourse.duration
+            ),
+            category: Number(
+              editingCourse.category
+            ),
           }),
         }
       );
@@ -268,7 +297,9 @@ function App() {
 
       setCourses((previous) =>
         previous.map((course) =>
-          course.id === data.id ? data : course
+          course.id === data.id
+            ? data
+            : course
         )
       );
 
@@ -323,13 +354,15 @@ function App() {
     window.location.reload();
   };
 
-  // ---------------- LOGIN / REGISTER SCREEN ----------------
+  // ---------------- LOGIN / REGISTER ----------------
 
   if (!token) {
     if (showRegister) {
       return (
         <Register
-          onBackToLogin={() => setShowRegister(false)}
+          onBackToLogin={() =>
+            setShowRegister(false)
+          }
         />
       );
     }
@@ -342,7 +375,9 @@ function App() {
         setPassword={setPassword}
         handleLogin={handleLogin}
         error={error}
-        onRegister={() => setShowRegister(true)}
+        onRegister={() =>
+          setShowRegister(true)
+        }
       />
     );
   }
@@ -351,8 +386,11 @@ function App() {
 
   return (
     <div className="app">
+
       <nav className="navbar">
-        <h1 className="logo">CourseHub</h1>
+        <h1 className="logo">
+          CourseHub
+        </h1>
 
         <button
           className="logout-button"
@@ -367,23 +405,33 @@ function App() {
         <EditCourse
           editingCourse={editingCourse}
           setEditingCourse={setEditingCourse}
-          handleUpdateCourse={handleUpdateCourse}
+          handleUpdateCourse={
+            handleUpdateCourse
+          }
           loading={loading}
+          categories={categories}
         />
 
         <CourseForm
           courseName={courseName}
           setCourseName={setCourseName}
           courseDuration={courseDuration}
-          setCourseDuration={setCourseDuration}
+          setCourseDuration={
+            setCourseDuration
+          }
           courseCategory={courseCategory}
-          setCourseCategory={setCourseCategory}
+          setCourseCategory={
+            setCourseCategory
+          }
+          categories={categories}
           handleAddCourse={handleAddCourse}
           loading={loading}
         />
 
         {error && (
-          <p className="error">{error}</p>
+          <p className="error">
+            {error}
+          </p>
         )}
 
         <CourseList
@@ -391,9 +439,13 @@ function App() {
           enrolledCourses={enrolledCourses}
           handleEnroll={handleEnroll}
           handleEdit={handleEdit}
-          handleDeleteCourse={handleDeleteCourse}
+          handleDeleteCourse={
+            handleDeleteCourse
+          }
           loading={loading}
-          enrollingCourse={enrollingCourse}
+          enrollingCourse={
+            enrollingCourse
+          }
         />
 
       </div>
