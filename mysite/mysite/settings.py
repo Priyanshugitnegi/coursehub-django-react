@@ -160,4 +160,5 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "https://coursehub-frontend-40eg.onrender.com",
 ]
